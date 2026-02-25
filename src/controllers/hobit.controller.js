@@ -53,7 +53,7 @@ async function completeHabit(req,res){
 
 try{
 
-    const habit = await Habit.findById(req.params.id);
+    const habit = await HabitModel.findById(req.params.id);
 
     if(!habit){
 
