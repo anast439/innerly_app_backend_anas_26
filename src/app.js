@@ -10,7 +10,9 @@ app.use(cookieParser());
 
 
 const authRouter = require("./routes/auth.routes");
-app.use("/api/auth",authRouter) 
+const moodRouter = require("./routes/mood.routes");
+app.use("/api/auth",authRouter);
+app.use("/api/mood",moodRouter);
 
 
  
