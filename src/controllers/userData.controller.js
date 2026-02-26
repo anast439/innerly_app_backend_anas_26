@@ -56,5 +56,34 @@ async function getCompleteUserData  (req, res) {
   }
 };
 
-module.exports = {getCompleteUserData}
+
+
+async function deleteAccount  (req, res) {
+  try {
+
+    const userId = req.user._id;
+
+    // 1️⃣ Delete all habits
+    await Habit.deleteMany({ userId });
+
+    // 2️⃣ Delete all moods
+    await Mood.deleteMany({ userId });
+
+    // 3️⃣ Delete user
+    await User.findByIdAndDelete(userId);
+
+    res.json({
+      message: "Account deleted successfully"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
+};
+
+
+
+module.exports = {getCompleteUserData,deleteAccount}
  
