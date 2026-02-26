@@ -15,12 +15,14 @@ const habitsRouter = require("./routes/habit.route");
 const dashboardRouter = require("./routes/dashboard.routes");
 const analyticsRouter = require("./routes/analytics.routes");
 const getUserDataRouter= require("./routes/userData.routes");
+const getTestApiRouter = require("./routes/get.test.routes");
 app.use("/api/auth",authRouter);
 app.use("/api/mood",moodRouter);
 app.use("/api/habit",habitsRouter); 
 app.use("/api/dashboard",dashboardRouter);
 app.use("/api/analytics",analyticsRouter); 
 app.use("/api/user-data",getUserDataRouter);
+app.use("api/test",getTestApiRouter);
 
 
  
