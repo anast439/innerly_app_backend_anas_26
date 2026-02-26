@@ -73,7 +73,7 @@ const weekStart = newDate();
         (((highHabitAvg - lowHabitAvg) / lowHabitAvg) * 100).toFixed(1);
     }
 
-    // Smart Insight Message
+    // Smart Insight Message 
     let insightMessage = "Track more data to see deeper insights.";
 
     if (improvementPercentage > 0) {
@@ -99,7 +99,73 @@ const weekStart = newDate();
 
 }
 
+async function getWeeklyGraphData  (req, res) {
+  try {
+
+    const userId = req.user._id;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - 6);
+
+    // Fetch moods
+    const moods = await MoodModel.find({
+      userId,
+      createdAt: { $gte: weekStart }
+    });
+
+    // Fetch habits
+    const habits = await HabitModel.find({ userId });
+
+    // Prepare date map for last 7 days
+    const result = [];
+
+    for (let i = 0; i < 7; i++) {
+
+      const currentDate = new Date(weekStart);
+      currentDate.setDate(weekStart.getDate() + i);
+
+      const dateKey = currentDate.toISOString().split("T")[0];
+
+      // Mood average for that day
+      const dayMoods = moods.filter(m =>
+        new Date(m.createdAt).toISOString().split("T")[0] === dateKey
+      );
+
+      let moodAverage = 0;
+      if (dayMoods.length > 0) {
+        const total = dayMoods.reduce((sum, m) => sum + m.moodLevel, 0);
+        moodAverage = (total / dayMoods.length).toFixed(1);
+      }
+
+      // Habit completions for that day
+      let habitCompletions = 0;
+
+      habits.forEach(habit => {
+        habit.completedDates.forEach(date => {
+          const d = new Date(date).toISOString().split("T")[0];
+          if (d === dateKey) habitCompletions++;
+        });
+      });
+
+      result.push({
+        date: dateKey,
+        moodAverage: Number(moodAverage),
+        habitCompletions
+      });
+    }
+
+    res.json(result);
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}; 
 
 
 
-module.exports = {getWeeklyAnalytics}
+
+
+module.exports = {getWeeklyAnalytics,getWeeklyGraphData}

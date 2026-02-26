@@ -6,4 +6,4 @@ const getDashboardSummaryController= require("../controllers/dashboard.controlle
 
 router.get("/summary",protect,getDashboardSummaryController.getDashboardSummary);
 
-module.exports = router;
+module.exports = router; 

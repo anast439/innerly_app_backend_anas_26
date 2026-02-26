@@ -116,7 +116,7 @@ try{
 
 async function deleteHabit  (req, res)  {
   try {
-    const habit = await Habit.findById(req.params.id);
+    const habit = await HabitModel.findById(req.params.id);
 
     if (!habit) {
       return res.status(404).json({ message: "Habit not found" });

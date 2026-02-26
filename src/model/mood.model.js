@@ -17,10 +17,10 @@ min:1,
 max:5,
 },
 
-stressLevel:{
+stressLevel:{ 
     type:Number,
     min:1,
-    max:10,
+    max:10, 
 },
 note:{
 type:String,
